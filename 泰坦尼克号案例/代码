@@ -1,0 +1,36 @@
+import pandas as pd
+from matplotlib import pyplot as plt,font_manager
+
+train = pd.read_csv('train.csv')
+
+print(train.info())
+print(train.describe())
+traindescribe = train.describe()
+traindescribe.to_csv('traindescribe.txt')
+
+
+font_set = font_manager.FontProperties(fname=r"C:\Windows\Fonts\simsun.ttc") #中文宋体路径 window自带
+survived_pclass = train.Pclass[train.Survived == 1].value_counts()
+unsurvived_pclass = train.Pclass[train.Survived == 0].value_counts()
+pclass_df = pd.DataFrame({'获救人数':survived_pclass,'未获救人数':unsurvived_pclass})
+pclass_df.plot(kind='bar',stacked=True,rot=-1)
+
+plt.legend(prop=font_set,fontsize=12)
+plt.title('客舱等级获救情况',fontproperties=font_set,fontsize=12)
+plt.xlabel('客舱等级',fontproperties=font_set,fontsize=12)
+plt.ylabel('人数',fontproperties=font_set,fontsize=12)
+plt.show()
+
+train['Embarked'].fillna('S',inplace=True)
+train['Age'].fillna(train['Age'].mean(),inplace=True)
+# train.loc[train.Cabin.notnull(),'Cabin']='Yes'  #非空集合
+# train.loc[train.Cabin.isnull(),'Cabin']='No'  #空集合
+train.drop(['Cabin'],axis=1,inplace=True)  #Cabin删除
+print(train.info())
+
+train_Pclass=pd.get_dummies(train['Pclass'],prefix='Pclass')
+train_Sex=pd.get_dummies(train['Sex'],prefix='Sex')
+train_df=pd.concat([train,train_Pclass,train_Sex],axis=1)
+train_df.drop(['Pclass','Sex'],axis=1,inplace=True)
+print(train.head(1))
+print(train_df.head(1))
