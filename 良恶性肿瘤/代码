@@ -1,0 +1,38 @@
+import pandas as pd
+columns = ['样本编号','肿块厚度','细胞大小均匀性','细胞形状均匀性','边缘粘性','单上皮细胞大小','裸核','染色体','正常核','有丝分裂','肿瘤性质']
+brdata = pd.read_csv(r'.\breast-cancer-wisconsin.data',names=columns)
+print(brdata.shape)
+print(brdata.info())
+import numpy as np
+data = brdata.replace(to_replace='?',value=np.nan)
+data = data.dropna(how='any')
+print(data.shape)
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(data[columns[1:10]],data[columns[10]],random_state=1,test_size=0.2)
+print(y_train.value_counts())
+print(y_test.value_counts())
+from sklearn.preprocessing import StandardScaler
+ss=StandardScaler()
+X_train_ss=ss.fit_transform(X_train)
+X_test_ss=ss.transform(X_test)
+
+
+from sklearn.neighbors import KNeighborsClassifier
+knnc = KNeighborsClassifier()
+knnc.fit(X_train_ss,y_train)
+print('KNeighborsClassiffier 平均准确性:',knnc.score(X_test_ss,y_test))
+
+from sklearn.naive_bayes import GaussianNB
+gsnc = GaussianNB()
+gsnc.fit(X_train_ss,y_train)
+print('GaussianNB 平均准确性:',gsnc.score(X_test_ss,y_test))
+
+
+knnc_y = knnc.predict(X_test_ss)
+from sklearn.metrics import classification_report
+print(classification_report(y_test,knnc_y,
+                            target_names=['Benjgn','Malignant']))
+gsnc_y = gsnc.predict(X_test_ss)
+from sklearn.metrics import classification_report
+print(classification_report(y_test,gsnc_y,
+                            target_names=['Benjgn','Malignant']))
