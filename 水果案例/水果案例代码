@@ -1,0 +1,39 @@
+import pandas as pd
+
+a=pd.read_table("fruit_data.txt")
+b=pd.read_table("pad.txt")
+
+# print(a.shape)
+# print(a.info())
+#
+# print(b.shape)
+# print(b.info())
+#
+
+#获取属性
+X=a.iloc[:,1:]
+#获取类别
+Y=a.iloc[:,0].T
+#训练集
+fruit_train_X=X
+fruit_train_y=Y
+
+#获取属性
+X=b.iloc[:,1:]
+#获取类别
+Y=b.iloc[:,0].T
+#训练集
+fruit1_test_X=X
+fruit1_test_y=Y
+
+#k近邻分类法
+from sklearn.neighbors import KNeighborsClassifier
+knnc=KNeighborsClassifier()
+knnc.fit(fruit_train_X,fruit_train_y)
+knnc_y=knnc.predict(fruit1_test_X)  #对测试数据进行预测
+
+
+print('真实结果:',fruit1_test_y)
+print('预测结果:',knnc_y)
+#显示预测精确率
+print('预测精确率:',knnc.score(fruit_train_X,fruit_train_y))
