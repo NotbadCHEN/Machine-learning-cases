@@ -1,0 +1,36 @@
+#水果数据集由爱丁堡大学的Iain
+import pandas as pd
+#使用pandas。read——csv读取文件
+fruit = pd.read_table('fruit_data.txt')
+print(fruit.shape)
+print(fruit.info())
+#拆分数据
+#使用sklearn.model_selection里的train_test_split模块用于分割数据
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(fruit[['mass','width','height','color_score']],fruit['fruit_label'],test_size=0.2,random_state=2)
+#查验训练，测试样本的数量和类别分类
+print(y_train.value_counts())
+print(y_test.value_counts())
+##数据标准化
+from sklearn.preprocessing import StandardScaler
+
+#标准化数据，保证每个维度的特征方差为1，均值为0
+ss = StandardScaler()#StandardScaler对矩阵做归一化处理，变换后的矩阵个特征均值为0，方差为1
+X_train_ss = ss.fit_transform(X_train)
+X_test_ss = ss.transform(X_test)
+#k近邻
+from sklearn.neighbors import KNeighborsClassifier
+knnc = KNeighborsClassifier()
+knnc.fit(X_train_ss,y_train)
+knnc_y=knnc.predict(X_test_ss)#得到预测的标签
+#从sklearn导入分类报告
+print('测试集大小:',X_test_ss.shape)
+print('真实结果:',y_test)#测试集的标签
+print('预测结果:',knnc_y)
+
+#显示预测精确率
+print('KNeighborsClassifier预测准确率:',knnc.score(X_test_ss,y_test))
+
+from sklearn.metrics import classification_report#获得其他标签的结果
+#使用classification_report模块获取其他指标的结果
+print(classification_report(y_test,knnc_y,target_names=['苹果','橙子','柠檬']))
