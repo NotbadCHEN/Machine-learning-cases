@@ -1,21 +1,22 @@
+#使用之前确保解释器是否有sklearn、sklearn-model两个库文件
 import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
 
-a=pd.read_csv('iris.csv')
-print(a.shape)
-print(a.info())
-print(a.describe())
+a=pd.read_csv('iris.csv')  #读取数据文件
+print(a.shape)    #显示数据分类、类型
+print(a.info())   #显示数据多少列、行
+print(a.describe())   #统计数据计数、均值、标准差、最小值、25%分位数、中位数、75%分位数和最大值
 
 
-X_train,X_test,y_train,y_test=train_test_split(a[['petal width','petal width','petal width','petal width']],a[['target']],test_size=0.2,random_state=2)
-print(y_train.value_counts())
-print(y_test.value_counts())
+X_train,X_test,y_train,y_test=train_test_split(a[['petal width','petal width','petal width','petal width']],a[['target']],test_size=0.2,random_state=2)  #数据特征 数据标签 测试集(test)与训练集(train)划分 种子数(可以用来固定后面的概率)
+print(y_train.value_counts())  #测试特征占比
+print(y_test.value_counts())   #测试标签占比
 
-
-a=StandardScaler()
+#归一化 下列为标准写法
+a=StandardScaler()    #StandardScaler归一化函数
 X_train_a=a.fit_transform(X_train)
 X_test_a=a.transform(X_test)
 
