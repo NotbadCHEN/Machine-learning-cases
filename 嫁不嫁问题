@@ -1,0 +1,58 @@
+from pandas import DataFrame
+import numpy as np
+import pandas as pd
+
+data = [{"f1":"帅","f2":"不好","f3":"矮","f4":"不上进","c1":"不嫁"},
+        {"f1":"不帅","f2":"好","f3":"矮","f4":"上进","c1":"不嫁"},
+        {"f1":"帅","f2":"好","f3":"矮","f4":"上进","c1":"嫁"},
+        {"f1":"不帅","f2":"好","f3":"高","f4":"上进","c1":"嫁"},
+        {"f1": "帅", "f2": "不好", "f3": "矮", "f4": "上进", "c1": "不嫁"},
+        {"f1": "不帅", "f2": "不好", "f3": "矮", "f4": "不上进", "c1": "不嫁"},
+        {"f1": "帅", "f2": "好", "f3": "高", "f4": "不上进", "c1": "嫁"},
+        {"f1": "不帅", "f2": "好", "f3": "高", "f4": "上进", "c1": "嫁"},
+        {"f1": "帅", "f2": "好", "f3": "高", "f4": "上进", "c1": "嫁"},
+        {"f1": "不帅", "f2": "不好", "f3": "高", "f4": "上进", "c1": "嫁"},
+        {"f1": "帅", "f2": "好", "f3": "矮", "f4": "不上进", "c1": "不嫁"},
+        {"f1": "帅", "f2": "好", "f3": "矮", "f4": "不上进", "c1": "不嫁"},]
+
+
+def P1(c_type):
+    # c_type
+    df = DataFrame(data)
+    count = df.shape[0]  # 显示数据总个数 12个
+
+    jia = df.loc[df['c1'].isin([c_type])].shape[0]
+    s = df.loc[df['f1'].isin(["帅"])].shape[0]
+    bh = df.loc[df['f2'].isin(["不好"])].shape[0]
+    gao = df.loc[df['f3'].isin(["高"])].shape[0]
+    sj = df.loc[df['f4'].isin(["上进"])].shape[0]
+
+    s_jia = df.loc[df['c1'].isin([c_type])].loc[df['f1'].isin(["帅"])].shape[0]
+    bh_jia = df.loc[df['c1'].isin([c_type])].loc[df['f2'].isin(["不好"])].shape[0]
+    gao_jia = df.loc[df['c1'].isin([c_type])].loc[df['f3'].isin(["高"])].shape[0]
+    sj_jia = df.loc[df['c1'].isin([c_type])].loc[df['f4'].isin(["上进"])].shape[0]
+
+    p_s_jia = s_jia / jia
+    p_bh_jia = bh_jia /jia
+    p_gao_jia = gao_jia / jia
+    p_sj_jia = sj_jia / jia
+
+    p_jia = jia / count
+    p_s = s / count
+    p_bh = bh / count
+    p_gao = gao / count
+    p_sj = sj / count
+
+    p = (p_s_jia*p_bh_jia*p_gao_jia*p_sj_jia*p_jia)/(p_s*p_bh*p_gao*p_sj)
+    return p
+if P1("嫁")>P1("不嫁"):
+    
+    print("嫁的概率%.3f" % P1("嫁"))
+else:
+    print("不嫁的概率%.3f" % P1("不嫁"))
+
+
+
+
+
+
